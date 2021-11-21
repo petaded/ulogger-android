@@ -69,18 +69,7 @@ public class WebSyncService extends JobIntentService {
         db.open(this);
         if (Logger.DEBUG) { Log.d(TAG, "[websync create finished]"); }
     }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (Logger.DEBUG) { Log.d(TAG, "[websync triggered onStartCommand]"); }
-        //Intent syncIntent = new Intent(getApplicationContext(), WebSyncService.class);
-
-        //enqueueWork(getApplicationContext(), syncIntent);
-        //cancelPending();
-        return START_NOT_STICKY;
-    }
-
-
+    
 
     /**
      * Handle synchronization intent
