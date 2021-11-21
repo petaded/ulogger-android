@@ -69,7 +69,7 @@ public class WebSyncService extends JobIntentService {
         db.open(this);
         if (Logger.DEBUG) { Log.d(TAG, "[websync create finished]"); }
     }
-    
+
 
     /**
      * Handle synchronization intent
@@ -222,7 +222,6 @@ public class WebSyncService extends JobIntentService {
                 WebSyncAlarmReceiver.getIntent(getApplicationContext(), syncIntent),
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        //pi = PendingIntent.getService(this, 0, syncIntent, FLAG_ONE_SHOT);
         if (am != null) {
             am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + FIVE_MINUTES, pi);
         }
