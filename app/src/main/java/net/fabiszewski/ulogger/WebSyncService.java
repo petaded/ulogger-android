@@ -48,7 +48,7 @@ public class WebSyncService extends JobIntentService {
     private WebHelper web;
     private static PendingIntent pi = null;
 
-    final private static int FIVE_MINUTES = 1000 * 30;
+    final private static int FIVE_MINUTES = 1000 * 60 * 5;
 
     static final int JOB_ID = 1001;
 
