@@ -48,7 +48,7 @@ public class WebSyncService extends JobIntentService {
     private WebHelper web;
     private static PendingIntent pi = null;
 
-    final private static int FIVE_MINUTES = 1000 * 60 * 5;
+    final private static int FIVE_MINUTES = 1000 * 30;
 
     static final int JOB_ID = 1001;
 
@@ -67,7 +67,20 @@ public class WebSyncService extends JobIntentService {
         web = new WebHelper(this);
         db = DbAccess.getInstance();
         db.open(this);
+        if (Logger.DEBUG) { Log.d(TAG, "[websync create finished]"); }
     }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (Logger.DEBUG) { Log.d(TAG, "[websync triggered onStartCommand]"); }
+        //Intent syncIntent = new Intent(getApplicationContext(), WebSyncService.class);
+
+        //enqueueWork(getApplicationContext(), syncIntent);
+        //cancelPending();
+        return START_NOT_STICKY;
+    }
+
+
 
     /**
      * Handle synchronization intent
@@ -93,6 +106,7 @@ public class WebSyncService extends JobIntentService {
         if (trackId > 0) {
             doSync(trackId);
         }
+
     }
 
     /**
@@ -142,7 +156,7 @@ public class WebSyncService extends JobIntentService {
         // iterate over positions in db
         try (Cursor cursor = db.getUnsynced()) {
             while (cursor.moveToNext()) {
-                int rowId = cursor.getInt(cursor.getColumnIndex(DbContract.Positions._ID));
+                int rowId = cursor.getInt(cursor.getColumnIndexOrThrow(DbContract.Positions._ID));
                 Map<String, String> params = cursorToMap(cursor);
                 params.put(WebHelper.PARAM_TRACKID, String.valueOf(trackId));
                 web.postPosition(params);
@@ -212,7 +226,14 @@ public class WebSyncService extends JobIntentService {
         if (Logger.DEBUG) { Log.d(TAG, "[websync set alarm]"); }
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent syncIntent = new Intent(getApplicationContext(), WebSyncService.class);
-        pi = PendingIntent.getService(this, 0, syncIntent, FLAG_ONE_SHOT);
+
+
+        pi = PendingIntent.getBroadcast(getApplicationContext(),
+                0,
+                WebSyncAlarmReceiver.getIntent(getApplicationContext(), syncIntent),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        //pi = PendingIntent.getService(this, 0, syncIntent, FLAG_ONE_SHOT);
         if (am != null) {
             am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + FIVE_MINUTES, pi);
         }

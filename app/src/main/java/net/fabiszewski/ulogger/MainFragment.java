@@ -112,7 +112,7 @@ public class MainFragment extends Fragment {
         locLed = layout.findViewById(R.id.loc_led);
         LinearLayout layoutSummary = layout.findViewById(R.id.layoutSummary);
 
-        switchLogger.setOnCheckedChangeListener(this::toggleLogging);
+        switchLogger.setOnCheckedChangeListener(this::toggleLog.dng);
         buttonWaypoint.setOnClickListener(this::addWaypoint);
         buttonUpload.setOnClickListener(this::uploadData);
         buttonNewTrack.setOnClickListener(this::newTrack);
@@ -185,7 +185,7 @@ public class MainFragment extends Fragment {
      * Called when the user swipes tracking switch
      * @param view View
      */
-    private void toggleLogging(View view, boolean isChecked) {
+    private void toggleLog.dng(View view, boolean isChecked) {
         if (isChecked && !LoggerService.isRunning()) {
             startLogger(view.getContext());
         } else if (!isChecked && LoggerService.isRunning()) {

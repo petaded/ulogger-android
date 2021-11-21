@@ -74,6 +74,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".WebSyncAlarmReceiver"/>
+
         <receiver
             android:name=".ExternalCommandReceiver"
             android:exported="true"
